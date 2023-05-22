@@ -14,6 +14,7 @@ public class CollisionHandler : MonoBehaviour
     AudioSource audioSource;
 
     bool isTransitioning = false;
+    bool collisionDisable = false;
 
     // Start is called before the first frame update
     void Start()
@@ -21,9 +22,27 @@ public class CollisionHandler : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Update()
+    {
+
+        RespondDebugKeys();
+    }
+
+    void RespondDebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Invoke("LoadNextLevel", levelLoadDelay);
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            collisionDisable = !collisionDisable;
+        }
+    }
+
     void OnCollisionEnter(Collision other)
     {
-        if (isTransitioning) return;
+        if (isTransitioning || collisionDisable) return;
 
         switch (other.gameObject.tag)
         {
